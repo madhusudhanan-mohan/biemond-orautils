@@ -52,7 +52,16 @@
 			value='solaris.smf.manage.cron' />
 	</property_group>
 -->
-	<instance name='default' enabled='true' />
+	<instance name='default' enabled='false'>
+		<property_group name='nodemanager' type='application'>
+		<% if @jsse_enabled == true %>
+			<propval name='JAVA_OPTIONS' type='astring' value="-Dweblogic.ssl.JSSEEnabled=true -Dweblogic.security.SSL.enableJSSE=true <%= @trust_env %>" />
+		<% else %>
+			<propval name='JAVA_OPTIONS' type='astring' value="-Dweblogic.ssl.JSSEEnabled=false -Dweblogic.security.SSL.enableJSSE=false <%= @trust_env %>" />
+		<% end %>
+		</property_group>
+	</instance>
+
 
 	<stability value='Unstable' />
 <!--
