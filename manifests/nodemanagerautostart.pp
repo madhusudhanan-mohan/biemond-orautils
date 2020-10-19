@@ -59,17 +59,20 @@ define orautils::nodemanagerautostart(
 
   if ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
     $location = "/home/${user}/${scriptName}"
+    $template = 'orautils/nodemanager.erb'
   } elsif ($::operatingsystem == 'Solaris') {
     $location = "/var/tmp/${scriptName}"
+    $template = 'orautils/nodemanager.xml.erb'
   }
   else {
     $location = "/etc/init.d/${scriptName}"
+    $template = 'orautils/nodemanager.erb'
   }
 
   file { $location :
     ensure  => present,
     mode    => '0755',
-    content => regsubst(template('orautils/nodemanager.erb'), '\r\n', "\n", 'EMG'),
+    content => regsubst(template(), '\r\n', "\n", 'EMG'),
   }
 
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
@@ -123,13 +126,6 @@ define orautils::nodemanagerautostart(
         }
     }
     'Solaris':{
-        file { "/var/tmp/${scriptName}" :
-          ensure  => present,
-          mode    => '0755',
-          content => regsubst(template('orautils/nodemanager.xml.erb'), '\r\n', "\n", 'EMG'),
-          require => File[$location],
-        }
-
         exec { "svccfg import  /var/tmp/${scriptName}":
           command   => "svccfg import  /var/tmp/${scriptName}",
           require   => File[$location],
