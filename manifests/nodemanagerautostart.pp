@@ -59,20 +59,20 @@ define orautils::nodemanagerautostart(
 
   if ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
     $location = "/home/${user}/${scriptName}"
-    $template = 'orautils/nodemanager.erb'
+    $templatename = 'orautils/nodemanager.erb'
   } elsif ($::operatingsystem == 'Solaris') {
     $location = "/var/tmp/${scriptName}"
-    $template = 'orautils/nodemanager.xml.erb'
+    $templatename = 'orautils/nodemanager.xml.erb'
   }
   else {
     $location = "/etc/init.d/${scriptName}"
-    $template = 'orautils/nodemanager.erb'
+    $templatename = 'orautils/nodemanager.erb'
   }
 
   file { $location :
     ensure  => present,
     mode    => '0755',
-    content => regsubst(template(), '\r\n', "\n", 'EMG'),
+    content => regsubst(template($templatename), '\r\n', "\n", 'EMG'),
   }
 
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
