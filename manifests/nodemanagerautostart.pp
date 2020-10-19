@@ -59,7 +59,9 @@ define orautils::nodemanagerautostart(
 
   if ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
     $location = "/home/${user}/${scriptName}"
-  } else {
+  } elsif ($::operatingsystem == 'Solaris')
+    $location = "/var/tmp/${scriptName}"
+  else {
     $location = "/etc/init.d/${scriptName}"
   }
 
@@ -115,6 +117,23 @@ define orautils::nodemanagerautostart(
           require   => File[$location],
           user      => 'root',
           unless    => "chkconfig | /bin/grep '${scriptName}'",
+          path      => $execPath,
+          logoutput => true,
+        }
+    }
+    'Solaris':{
+        file { "/var/tmp/${scriptName}" :
+          ensure  => present,
+          mode    => '0755',
+          content => regsubst(template('orautils/nodemanager.xml.erb'), '\r\n', "\n", 'EMG'),
+          require => File[$location],
+        }
+
+        exec { "svccfg import  /var/tmp/${scriptName}":
+          command   => "svccfg import  /var/tmp/${scriptName}",
+          require   => File[$location],
+          user      => 'root',
+          unless    => " svcs -a  | /bin/grep -i svc:/web/nodemanager:default",
           path      => $execPath,
           logoutput => true,
         }
