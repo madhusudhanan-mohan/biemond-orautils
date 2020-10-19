@@ -59,8 +59,9 @@ define orautils::nodemanagerautostart(
 
   if ($::operatingsystem in ['CentOS','RedHat','OracleLinux'] and $::operatingsystemmajrelease == '7') {
     $location = "/home/${user}/${scriptName}"
-  } elsif ($::operatingsystem == 'Solaris')
+  } elsif ($::operatingsystem == 'Solaris') {
     $location = "/var/tmp/${scriptName}"
+  }
   else {
     $location = "/etc/init.d/${scriptName}"
   }
