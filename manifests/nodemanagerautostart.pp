@@ -130,7 +130,7 @@ define orautils::nodemanagerautostart(
           command   => "svccfg import  /var/tmp/${scriptName}",
           require   => File[$location],
           user      => 'root',
-          unless    => " svcs -a  | /bin/grep -i svc:/web/nodemanager:default",
+          unless    => "/usr/bin/svcs -a  | /bin/grep -i svc:/web/nodemanager:default",
           path      => $execPath,
           logoutput => true,
         }
