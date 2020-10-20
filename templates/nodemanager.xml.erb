@@ -28,7 +28,7 @@
 	<exec_method
 		type='method'
 		name='start'
-		exec=' "<%= @domain_path %>/<%= @domain %>/bin/startNodeManager.sh &amp; " '
+		exec='<%= @domain_path %>/<%= @domain %>/bin/startNodeManager.sh &amp;'
 		timeout_seconds='60'>
 		<method_context>
 	       <method_credential user='wlsadmin' group='oracle' />
@@ -42,7 +42,7 @@
 	<exec_method
 		type='method'
 		name='stop'
-		exec=' "<%= @domain_path %>/<%= @domain %>/bin/stopNodeManager.sh &amp; " '
+		exec='<%= @domain_path %>/<%= @domain %>/bin/stopNodeManager.sh &amp;'
 		timeout_seconds='60'>
 		<method_context>
 	       <method_credential user='wlsadmin' group='oracle' />
